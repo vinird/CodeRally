@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Chip from '@material-ui/core/Chip';
+import Hidden from '@material-ui/core/Hidden';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -35,9 +36,6 @@ const styles = theme => ({
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
     position: 'absolute',
-  },
-  table: {
-    minWidth: 700,
   },
   button: {
     backgroundColor: grey[200],
@@ -130,8 +128,13 @@ class Home extends Component {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Tech</TableCell>
+              <Hidden only={['xs', 'sm']}>
+                <TableCell>Description</TableCell>
+              </Hidden>
+              <Hidden only={['xs', 'sm']}>
+                <TableCell>Tech</TableCell>
+              </Hidden>
+
               <TableCell>Project Page</TableCell>
             </TableRow>
           </TableHead>
@@ -154,8 +157,12 @@ class Home extends Component {
                             <Chip className={classes.chip} label="NEW" />
                           </TableCell>
                         ) : <TableCell>{name}</TableCell>}
-                      <TableCell>{description}</TableCell>
-                      <TableCell>{tech}</TableCell>
+                       <Hidden only={['xs', 'sm']}>
+                       <TableCell>{description}</TableCell>
+                       </Hidden>
+                       <Hidden only={['xs', 'sm']}>
+                       <TableCell>{tech}</TableCell>
+                       </Hidden>                      
                       <TableCell><Button className={classes.button} href={`/projects/${name}`}>View</Button></TableCell>
                     </TableRow>
                   );
@@ -177,7 +184,11 @@ class Home extends Component {
         <Button variant="fab" aria-label="Add" className={classes.icon} onClick={this.addProject}>
           <AddIcon />
         </Button>
-        <AddProjectModal open={modalOpen} modalClosed={this.modalClosed} renderSnackbar={this.renderSnackbar} />
+        <AddProjectModal
+          open={modalOpen}
+          modalClosed={this.modalClosed}
+          renderSnackbar={this.renderSnackbar}
+        />
         <Snackbar
           anchorOrigin={{
             vertical: 'top',

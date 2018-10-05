@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import grey from '@material-ui/core/colors/grey';
+import {
+  Grid, Dialog, DialogTitle, DialogContent, DialogActions,
+} from '@material-ui/core';
 import AppService from '../../services/AppService';
-
 import { validateUrl, validateRepoLink } from '../../utils';
 
 const SNACKBAR_SUCCESS_MESSAGE = 'Submitted. After a quick review, your project will be listed!';
@@ -15,26 +16,14 @@ const SNACKBAR_FAILURE_MESSAGE = 'Project failed to be added!';
 const SNACKBAR_LINK_ERROR = 'Error validating website link!';
 const SNACKBAR_REPO_LINK_ERROR = 'Error validating repository link!';
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
 const btnStyles = {
   margin: '10px',
 };
 
 const styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 100,
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 4,
+  root: {
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
   },
   button: {
     backgroundColor: deepPurple[700],
@@ -162,43 +151,71 @@ class AddProjectModal extends Component {
 
   render() {
     const {
-      name, description, partners, tech, link, repoLink, showLinkError, showRepoLinkError, loading
+      name, description, partners, tech, link, repoLink, showLinkError, showRepoLinkError, loading,
     } = this.state;
     const { open, classes } = this.props;
     return (
       <span>
-        <Modal open={open} onClose={this.handleClose}>
-          <div className={classes.paper} style={getModalStyle()}>
-            <h2>List Project</h2>
-            {loading && <LinearProgress />}
-            <TextField fullWidth label="Project Name" value={name} onChange={this.handleNameChange} />
-            <br />
-            <br />
-            <TextField fullWidth label="Description" value={description} onChange={this.handleDescriptionChange} />
-            <br />
-            <br />
-            <TextField fullWidth label="Tech Stack" value={tech} onChange={this.handleTechChange} />
-            <br />
-            <br />
-            <TextField fullWidth label="What partners are you looking for?" value={partners} onChange={this.handlePartnersChange} />
-            <br />
-            <br />
-            <TextField error={showLinkError} helperText={showLinkError ? 'Please enter a valid https url' : ''} fullWidth label="Website" value={link} onChange={this.handleLinkChange} />
-            <br />
-            <br />
-            <TextField error={showRepoLinkError} helperText={showRepoLinkError ? 'Please enter a valid github repo url' : ''} fullWidth label="Repo Link" value={repoLink} onChange={this.handleRepoLinkChange} />
-            <br />
-            <br />
-            <div style={{ textAlign: 'center' }}>
-              <Button style={btnStyles} disabled={loading} onClick={this.handleClose} className={classes.btnCancel}>
+        <Dialog
+          open={open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <Grid container xs={12}>
+            <Grid item xs={12}>
+              <DialogTitle id="form-dialog-title" className={classes.root}>
+                <h4>List Project</h4>
+                {loading && <LinearProgress />}
+              </DialogTitle>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContent className={classes.root}>
+                <TextField fullWidth label="Project Name" value={name} onChange={this.handleNameChange} />
+              </DialogContent>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContent className={classes.root}>
+                <TextField fullWidth label="Description" value={description} onChange={this.handleDescriptionChange} />
+              </DialogContent>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContent className={classes.root}>
+                <TextField fullWidth label="Tech Stack" value={tech} onChange={this.handleTechChange} />
+              </DialogContent>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContent className={classes.root}>
+                <TextField fullWidth label="What partners are you looking for?" value={partners} onChange={this.handlePartnersChange} />
+              </DialogContent>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContent className={classes.root}>
+                <TextField error={showLinkError} helperText={showLinkError ? 'Please enter a valid https url' : ''} fullWidth label="Website" value={link} onChange={this.handleLinkChange} />
+              </DialogContent>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContent className={classes.root}>
+                <TextField error={showRepoLinkError} helperText={showRepoLinkError ? 'Please enter a valid github repo url' : ''} fullWidth label="Repo Link" value={repoLink} onChange={this.handleRepoLinkChange} />
+              </DialogContent>
+            </Grid>
+            <Grid
+              item
+              container
+              xs={12}
+              justify="center"
+              alignItems="center"
+            >
+              <DialogActions className={classes.root}>
+                <Button style={btnStyles} onClick={this.handleClose} className={classes.btnCancel}>
                 Cancel
-              </Button>
-              <Button style={btnStyles} disabled={loading} onClick={this.handleSubmit} className={classes.button}>
+                </Button>
+                <Button style={btnStyles} onClick={this.handleSubmit} className={classes.button}>
                 Submit
-              </Button>
-            </div>
-          </div>
-        </Modal>
+                </Button>
+              </DialogActions>
+            </Grid>
+          </Grid>
+        </Dialog>
       </span>
     );
   }
