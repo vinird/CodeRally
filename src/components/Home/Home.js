@@ -49,6 +49,11 @@ const styles = theme => ({
   chip: {
     backgroundColor: yellow[500],
     color: grey[900],
+    marginLeft: 18,
+    fontWeight: 'bold',
+    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1.5px 2.5px 0 rgba(0, 0, 0, 0.19)',
+    height: '2.5em',
+    fontSize: '0.825em'
   },
 });
 
