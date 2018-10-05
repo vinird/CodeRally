@@ -17,6 +17,7 @@ import grey from '@material-ui/core/colors/grey';
 import yellow from '@material-ui/core/colors/yellow';
 import AddProjectModal from '../AddProjectModal/AddProjectModal';
 import AppService from '../../services/AppService';
+import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
   root: {
@@ -58,6 +59,7 @@ class Home extends Component {
       loadingProjects: true,
       modalOpen: false,
       snackbarOpen: false,
+      initialProjects: [],
       projects: [],
       snackbarText: '',
     };
@@ -67,13 +69,15 @@ class Home extends Component {
     this.renderSnackbar = this.renderSnackbar.bind(this);
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     this.fetchProjects();
   }
 
   async fetchProjects() {
     const projects = await AppService.getProjects();
-    this.setState({ projects, loadingProjects: false });
+    this.setState({ projects });
+    this.setState({ initialProjects: projects });
+    this.setState({ loadingProjects: false });
   }
 
   addProject() {
@@ -93,11 +97,30 @@ class Home extends Component {
     }, 5000);
   }
 
+  filteredProjects = (event) => {
+    var updatedProject = this.state.initialProjects;
+    updatedProject = updatedProject.filter(function(item) {
+      const query = event.target.value.toLowerCase();
+      const tableContent = `${item.name}${item.description}${item.tech}`;
+
+      return tableContent.toLowerCase().indexOf(query) >= 0;
+    });
+    this.setState({projects: updatedProject});
+  }
+
   renderProjects() {
     const { projects, loadingProjects } = this.state;
     const { classes } = this.props;
+
     return (
       <Paper className={classes.root}>
+        <TextField
+          label="Search"
+          className={classes.textField}
+          margin="normal"
+          style={{ marginLeft: '1em' }}
+          onChange={this.filteredProjects}
+        />
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
