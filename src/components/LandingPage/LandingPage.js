@@ -1,48 +1,88 @@
-import React, { Component } from "react";
-import { Button } from "@material-ui/core";
-import lightBlue from "@material-ui/core/colors/lightBlue";
-import grey from "@material-ui/core/colors/grey";
+import React from 'react';
+import { Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import deepPurple from '@material-ui/core/colors/deepPurple';
+import Typist from 'react-typist';
+import 'react-typist/dist/Typist.css';
 
-class LandingPage extends Component {
-  render() {
-    return (
-      <div>
-        <div
-          style={{
-            marginTop: "40px",
-            marginLeft: "50px",
-            marginRight: "50px",
-            minHeight: "200px"
-          }}
-        >
-          <h3 style={{ fontSize: "30px" }}>
-            <div style={{ paddingTop: "10px", textAlign: "center" }}>
-              <p>Get experience by building real apps with a real team.</p>
-              <p>
-                CodeRally exists so developers who want to boost their skills
-                can get the experience they need to get to the next level. There
-                really is no better qualification than real project experience!
-              </p>
-            </div>
-          </h3>
-        </div>
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
-          <Button
-            href="/home"
-            style={{ backgroundColor: grey[200], color: lightBlue[500] }}
-          >
+
+const styles = theme => ({
+  root: {
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: deepPurple[700],
+    color: theme.palette.common.white,
+    '&:hover': {
+      backgroundColor: deepPurple[900],
+    },
+    padding: '15px',
+    fontWeight: 'bold',
+  },
+  typingItem: {
+    color: deepPurple[700],
+    fontWeight: 'bold',
+  },
+  typist: {
+    display: 'inline',
+  },
+  improveSkillsTextBlock: {
+    padding: '40px',
+    fontSize: '2em',
+  },
+  aboutUs: {
+    marginTop: '50px',
+    fontSize: '1.2em',
+  },
+});
+
+const techList = [
+  { tech: 'React', chars: 5 },
+  { tech: 'NodeJS', chars: 6 },
+  { tech: 'MongoDB', chars: 7 },
+  { tech: 'Angular', chars: 7 },
+  { tech: 'Express', chars: 7 },
+  { tech: 'Frontend', chars: 9 },
+];
+
+const LandingPage = ({ classes }) => (
+  <div className={classes.root}>
+    <div className={classes.improveSkillsTextBlock}>
+      <span>Improve your </span>
+      <Typist className={classes.typist}>
+        {techList.map(({ tech, chars }) => (
+          <span>
+            <span className={classes.typingItem}>{tech}</span>
+            <Typist.Backspace count={chars} delay={chars * 120} avgTypingDelay={120} />
+          </span>
+        ))}
+        <span className={classes.typingItem}>FullStack</span>
+      </Typist>
+      <span>skills.</span>
+    </div>
+    <div>
+      <Button
+        href="/home"
+        className={classes.button}
+      >
             Get Started
-          </Button>
-        </div>
-      </div>
-    );
-  }
-}
+      </Button>
+    </div>
+    <div className={classes.aboutUs}>
+      <h2>About Us</h2>
+      <p>
+        CodeRally is a project listing board for developers by developers.
+      </p>
+      <p>
+        Contributing to open source can be intimidating.
+      </p>
+      <p>
+        CodeRally gives you a simplified look at projects so you can pick a project easier.
+      </p>
+    </div>
+  </div>
+);
 
-export default LandingPage;
+export default withStyles(styles)(LandingPage);

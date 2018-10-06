@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Home from "./components/Home/Home";
-import Project from "./components/Project/Project";
-import LandingPage from "./components/LandingPage/LandingPage";
-import Header from "./components/Header/Header";
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Home from './components/Home/Home';
+import Project from './components/Project/Project';
+import LandingPage from './components/LandingPage/LandingPage';
+import Header from './components/Header/Header';
 
 export default class App extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ export default class App extends Component {
       <div>
         <Header />
         <Router>
-          <div className="app">
+          <div className="app" style={{ marginTop: '64px' }}>
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/home" component={Home} />
             <Route exact path="/projects/:name" component={Project} />

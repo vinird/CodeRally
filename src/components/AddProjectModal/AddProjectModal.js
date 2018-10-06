@@ -180,7 +180,7 @@ class AddProjectModal extends Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <Grid container xs={12}>
+          <Grid container>
             <Grid item xs={12}>
               <DialogTitle id="form-dialog-title" className={classes.root}>
                 <h4>List Project</h4>

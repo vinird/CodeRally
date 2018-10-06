@@ -122,7 +122,7 @@ class Home extends Component {
           label="Search"
           className={classes.textField}
           margin="normal"
-          style={{ marginLeft: '1em' }}
+          style={{ marginLeft: '1em', width: '280px' }}
           onChange={this.filterProjects}
         />
         <Table className={classes.table}>
