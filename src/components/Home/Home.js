@@ -16,9 +16,9 @@ import deepPurple from '@material-ui/core/colors/deepPurple';
 import lightBlue from '@material-ui/core/colors/lightBlue';
 import grey from '@material-ui/core/colors/grey';
 import yellow from '@material-ui/core/colors/yellow';
+import TextField from '@material-ui/core/TextField';
 import AddProjectModal from '../AddProjectModal/AddProjectModal';
 import AppService from '../../services/AppService';
-import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
   root: {
@@ -51,7 +51,7 @@ const styles = theme => ({
     fontWeight: 'bold',
     boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1.5px 2.5px 0 rgba(0, 0, 0, 0.19)',
     height: '2.5em',
-    fontSize: '0.825em'
+    fontSize: '0.825em',
   },
 });
 
@@ -70,9 +70,10 @@ class Home extends Component {
     this.modalClosed = this.modalClosed.bind(this);
     this.fetchProjects = this.fetchProjects.bind(this);
     this.renderSnackbar = this.renderSnackbar.bind(this);
+    this.filterProjects = this.filterProjects.bind(this);
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     this.fetchProjects();
   }
 
@@ -84,7 +85,6 @@ class Home extends Component {
   }
 
   addProject() {
-    console.log('button clicked');
     this.setState({ modalOpen: true });
   }
 
@@ -93,22 +93,23 @@ class Home extends Component {
     this.fetchProjects();
   }
 
-  renderSnackbar({ snackbarText }) {
-    this.setState({ snackbarOpen: true, snackbarText });
-    setTimeout(() => {
-      this.setState({ snackbarOpen: false });
-    }, 5000);
-  }
-
-  filteredProjects = (event) => {
-    var updatedProject = this.state.initialProjects;
-    updatedProject = updatedProject.filter(function(item) {
+  filterProjects(event) {
+    const { initialProjects } = this.state;
+    let updatedProject = initialProjects;
+    updatedProject = updatedProject.filter((item) => {
       const query = event.target.value.toLowerCase();
       const tableContent = `${item.name}${item.description}${item.tech}`;
 
       return tableContent.toLowerCase().indexOf(query) >= 0;
     });
-    this.setState({projects: updatedProject});
+    this.setState({ projects: updatedProject });
+  }
+
+  renderSnackbar({ snackbarText }) {
+    this.setState({ snackbarOpen: true, snackbarText });
+    setTimeout(() => {
+      this.setState({ snackbarOpen: false });
+    }, 5000);
   }
 
   renderProjects() {
@@ -122,7 +123,7 @@ class Home extends Component {
           className={classes.textField}
           margin="normal"
           style={{ marginLeft: '1em' }}
-          onChange={this.filteredProjects}
+          onChange={this.filterProjects}
         />
         <Table className={classes.table}>
           <TableHead>
@@ -157,12 +158,12 @@ class Home extends Component {
                             <Chip className={classes.chip} label="NEW" />
                           </TableCell>
                         ) : <TableCell>{name}</TableCell>}
-                       <Hidden only={['xs', 'sm']}>
-                       <TableCell>{description}</TableCell>
-                       </Hidden>
-                       <Hidden only={['xs', 'sm']}>
-                       <TableCell>{tech}</TableCell>
-                       </Hidden>                      
+                      <Hidden only={['xs', 'sm']}>
+                        <TableCell>{description}</TableCell>
+                      </Hidden>
+                      <Hidden only={['xs', 'sm']}>
+                        <TableCell>{tech}</TableCell>
+                      </Hidden>
                       <TableCell><Button className={classes.button} href={`/projects/${name}`}>View</Button></TableCell>
                     </TableRow>
                   );
