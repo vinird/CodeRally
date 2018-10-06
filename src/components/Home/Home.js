@@ -79,7 +79,8 @@ class Home extends Component {
 
   async fetchProjects() {
     const projects = await AppService.getProjects();
-    this.setState({ projects });
+    // sorting projects by earliest date created
+    this.setState({ projects: [...projects].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) });
     this.setState({ initialProjects: projects });
     this.setState({ loadingProjects: false });
   }
@@ -115,7 +116,6 @@ class Home extends Component {
   renderProjects() {
     const { projects, loadingProjects } = this.state;
     const { classes } = this.props;
-
     return (
       <Paper className={classes.root}>
         <TextField
