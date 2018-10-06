@@ -52,6 +52,11 @@ export default class Project extends Component {
               </Typography>
               <Typography className="description" component="p">
                 {bull}
+                <b>Chat Link: </b>
+                {project && project.chatLink ? <a href={project.chatLink}>{project.chatLink}</a> : 'none'}
+              </Typography>
+              <Typography className="description" component="p">
+                {bull}
                 <b>Repo Link: </b>
                 {project && project.repoLink ? <a href={project.repoLink}>{project.repoLink}</a> : 'none'}
               </Typography>

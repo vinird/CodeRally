@@ -14,6 +14,7 @@ import { validateUrl, validateRepoLink } from '../../utils';
 const SNACKBAR_SUCCESS_MESSAGE = 'Submitted. After a quick review, your project will be listed!';
 const SNACKBAR_FAILURE_MESSAGE = 'Project failed to be added!';
 const SNACKBAR_LINK_ERROR = 'Error validating website link!';
+const SNACKBAR_CHAT_LINK_ERROR = 'Error validating chat link!';
 const SNACKBAR_REPO_LINK_ERROR = 'Error validating repository link!';
 
 const btnStyles = {
@@ -50,9 +51,11 @@ class AddProjectModal extends Component {
       partners: '',
       tech: '',
       link: '',
+      chatLink: '',
       repoLink: '',
       loading: false,
       showLinkError: false,
+      showChatLinkError: false,
       showRepoLinkError: false,
     };
     this.fetchProjects = props.fetchProjects;
@@ -62,6 +65,7 @@ class AddProjectModal extends Component {
     this.handlePartnersChange = this.handlePartnersChange.bind(this);
     this.handleTechChange = this.handleTechChange.bind(this);
     this.handleLinkChange = this.handleLinkChange.bind(this);
+    this.handleChatLinkChange = this.handleChatLinkChange.bind(this);
     this.handleRepoLinkChange = this.handleRepoLinkChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -91,6 +95,14 @@ class AddProjectModal extends Component {
     }
   }
 
+  handleChatLinkChange(e) {
+    if (validateUrl(e.target.value)) {
+      this.setState({ chatLink: e.target.value, showChatLinkError: false });
+    } else {
+      this.setState({ chatLink: e.target.value, showChatLinkError: true });
+    }
+  }
+
   handleRepoLinkChange(e) {
     if (validateRepoLink(e.target.value)) {
       this.setState({ repoLink: e.target.value, showRepoLinkError: false });
@@ -107,10 +119,15 @@ class AddProjectModal extends Component {
   async handleSubmit() {
     const { renderSnackbar } = this.props;
     const {
-      showLinkError, showRepoLinkError, name, description, partners, tech, link, repoLink,
+      showLinkError, showChatLinkError, showRepoLinkError, name, description, partners, tech, link, chatLink, repoLink,
     } = this.state;
     if (showLinkError) {
       const snackbarText = SNACKBAR_LINK_ERROR;
+      renderSnackbar({ snackbarText });
+      return;
+    }
+    if (showChatLinkError) {
+      const snackbarText = SNACKBAR_CHAT_LINK_ERROR;
       renderSnackbar({ snackbarText });
       return;
     }
@@ -127,6 +144,7 @@ class AddProjectModal extends Component {
         partners,
         tech,
         link,
+        chatLink,
         repoLink,
       });
       this.setState({
@@ -135,6 +153,7 @@ class AddProjectModal extends Component {
         partners: '',
         tech: '',
         link: '',
+        chatLink: '',
         repoLink: '',
         loading: false,
       });
@@ -151,7 +170,7 @@ class AddProjectModal extends Component {
 
   render() {
     const {
-      name, description, partners, tech, link, repoLink, showLinkError, showRepoLinkError, loading,
+      name, description, partners, tech, link, chatLink, repoLink, showLinkError, showChatLinkError, showRepoLinkError, loading,
     } = this.state;
     const { open, classes } = this.props;
     return (
@@ -191,6 +210,11 @@ class AddProjectModal extends Component {
             <Grid item xs={12}>
               <DialogContent className={classes.root}>
                 <TextField error={showLinkError} helperText={showLinkError ? 'Please enter a valid https url' : ''} fullWidth label="Website" value={link} onChange={this.handleLinkChange} />
+              </DialogContent>
+            </Grid>
+            <Grid item xs={12}>
+              <DialogContent className={classes.root}>
+                <TextField error={showChatLinkError} helperText={showChatLinkError ? 'Please enter a valid https url' : ''} fullWidth label="Slack/Gitter" value={chatLink} onChange={this.handleChatLinkChange} />
               </DialogContent>
             </Grid>
             <Grid item xs={12}>
